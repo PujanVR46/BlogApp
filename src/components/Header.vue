@@ -1,24 +1,26 @@
 <template>
-  <v-app-bar dark app>
+  <v-app-bar height="100" dark app>
     <router-link to="/" tag="span">
-      <v-toolbar-title class="headline text-uppercase">
-        <span>ANIME/MANGA</span>
+      <v-toolbar-title onmouseover class="headline ff linkTags text-uppercase">
+        <span class="display-2 font-weight-bold grey--text">ANIME</span>
         <span class="font-weight-light">BLOGS</span>
       </v-toolbar-title>
     </router-link>
     <v-spacer></v-spacer>
-    <router-link to="/blog-add" tag="span">
-      <v-btn>Add Blog</v-btn>
+    <router-link to="/blog-add" tag="span" class="px-5 ff">
+      <v-btn>Add Blogs</v-btn>
     </router-link>
-    <router-link to="/blog-view" tag="span">
-      <v-btn>My Blog</v-btn>
+    <router-link to="/blog-view" tag="span" class="px-5 ff">
+      <v-btn>
+        <span class="mr-2">My Blogs</span>
+      </v-btn>
     </router-link>
-    <router-link to="/login" tag="span">
-      <v-btn text v-if="token!=''" @click="signout()">
+    <router-link to="/login" tag="span" class="px-5 ff">
+      <v-btn v-if="token!=''" @click="signout()">
         <span class="mr-2">Logout</span>
       </v-btn>
       <template v-else>
-        <v-btn text to="/login">
+        <v-btn to="/login">
           <span class="mr-2">Login</span>
         </v-btn>
       </template>
@@ -49,3 +51,11 @@ export default {
   computed: mapGetters(["token"])
 };
 </script>
+<style>
+.fixbg {
+  background-attachment: fixed;
+  background-position: center;
+  background-image: url(../assets/image8.jpg);
+  background-size: cover;
+}
+</style>
