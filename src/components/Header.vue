@@ -1,42 +1,42 @@
 <template>
-  <v-app-bar height="100" dark app>
+  <v-app-bar height="60" dark app>
     <router-link to="/" tag="span">
       <v-toolbar-title onmouseover class="headline ff linkTags text-uppercase">
-        <span class="display-2 font-weight-bold grey--text">ANIME</span>
+        <span class="display-1 font-weight-bold grey--text">ANIME</span>
         <span class="font-weight-light">BLOGS</span>
       </v-toolbar-title>
     </router-link>
     <v-spacer></v-spacer>
-    <router-link to="/blog-add" tag="span" class="px-5 ff">
-      <v-btn>Add Blogs</v-btn>
-    </router-link>
-    <router-link to="/blog-view" tag="span" class="px-5 ff">
-      <v-btn>
-        <span class="mr-2">My Blogs</span>
-      </v-btn>
-    </router-link>
-    <router-link to="/login" tag="span" class="px-5 ff">
-      <v-btn v-if="token!=''" @click="signout()">
+
+    <template v-if="loggedIn==true">
+      <router-link to="/blog-view" tag="span" class="px-5 ff">
+        <v-btn text small>
+          <span>My Blogs</span>
+        </v-btn>
+      </router-link>
+      <router-link to="/blog-add" tag="span" class="px-3 ff">
+        <v-btn class="mr-2" text small>
+          <v-icon class="font-weight-bold">add</v-icon>Add Blogs
+        </v-btn>
+      </router-link>
+
+      <v-btn text small @click="signout()">
         <span class="mr-2">Logout</span>
       </v-btn>
-      <template v-else>
-        <v-btn to="/login">
-          <span class="mr-2">Login</span>
-        </v-btn>
-      </template>
-    </router-link>
+    </template>
+    <template v-else>
+      <v-btn text to="/login" small>
+        <span class="mr-2">Login</span>
+      </v-btn>
+    </template>
   </v-app-bar>
 </template>
 
 <script>
 /* eslint-disable default case, no-console */
-import { mapGetters, mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   name: "header",
-  components: {
-    //
-  },
-
   methods: {
     ...mapMutations(["logout"]),
     signout() {
@@ -45,10 +45,7 @@ export default {
       this.$router.push("/login");
     }
   },
-  data: () => ({
-    //
-  }),
-  computed: mapGetters(["token"])
+  computed: mapGetters(["loggedIn"])
 };
 </script>
 <style>

@@ -6,6 +6,8 @@ import Register from '../components/Register.vue';
 import BlogAdd from '../components/BlogAdd.vue';
 import BlogView from '../components/BlogView.vue';
 import BlogDetail from '../components/BlogDetail.vue';
+import BlogEdit from '../components/BlogEdit.vue';
+/* eslint-disable default case, no-unused-vars */
 
 Vue.use(VueRouter);
 
@@ -39,12 +41,20 @@ const routes = [
 		path: '/blog-view/:id',
 		name: 'blogdetail',
 		component: BlogDetail
+	},
+	{
+		path: '/blog-edit/:id',
+		name: 'blogedit',
+		component: BlogEdit
 	}
 ];
 
 const router = new VueRouter({
 	routes,
-	mode: 'history'
+	mode: 'history',
+	scrollBehavior(to, from, savedPosition) {
+		return { x: 0, y: 0 };
+	}
 });
 
 export default router;

@@ -1,12 +1,14 @@
 import axios from 'axios';
 import CONSTANTS from '../constants';
-/* eslint-disable default case, no-unused-vars */
+/* eslint-disable default case, no-unused-vars*/
+/* eslint-disable default case, no-console*/
+
 const state = {
-	tokenValue: ''
+	loggedIn: false
 };
 
 const getters = {
-	token: state => state.tokenValue
+	loggedIn: state => state.loggedIn
 };
 
 const actions = {
@@ -23,6 +25,7 @@ const actions = {
 	async register({ commit }, data) {
 		try {
 			const response = await axios.post(`${CONSTANTS.baseUrl}/api/v1/auth/register`, data);
+			commit('register', response.data);
 			return response.data;
 		} catch (e) {
 			throw e;
@@ -31,8 +34,15 @@ const actions = {
 };
 
 const mutations = {
-	loggedIn: (state, tokenValue) => (state.tokenValue = tokenValue.token),
-	logout: state => (state.tokenValue = '')
+	loggedIn: (state, tokenValue) => {
+		window.localStorage.setItem('authenticated', tokenValue.token);
+		state.loggedIn = true;
+	},
+	register: (state, tokenValue) => {
+		window.localStorage.setItem('authenticated', tokenValue.token);
+		state.loggedIn = true;
+	},
+	logout: state => (state.loggedIn = false)
 };
 export default {
 	state,
