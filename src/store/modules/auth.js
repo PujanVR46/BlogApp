@@ -4,7 +4,7 @@ import CONSTANTS from '../constants';
 /* eslint-disable default case, no-console*/
 
 const state = {
-	loggedIn: false
+	loggedIn: (window.localStorage.getItem('loginStatus')=="true") || false
 };
 
 const getters = {
@@ -36,10 +36,12 @@ const actions = {
 const mutations = {
 	loggedIn: (state, tokenValue) => {
 		window.localStorage.setItem('authenticated', tokenValue.token);
+		window.localStorage.setItem('loginStatus', true);
 		state.loggedIn = true;
 	},
 	register: (state, tokenValue) => {
 		window.localStorage.setItem('authenticated', tokenValue.token);
+		window.localStorage.setItem('loginStatus', true);
 		state.loggedIn = true;
 	},
 	logout: state => (state.loggedIn = false)
