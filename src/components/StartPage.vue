@@ -17,7 +17,7 @@
       </v-row>
     </v-parallax>
     <v-app class="bg">
-      <div v-for="data in allBlogData" v-bind:key="data.id">
+      <div v-for="data in currentItems" v-bind:key="data.id">
         <v-card max-width="1000" height="200" class="mx-auto pt-1 pa-5 mt-5 mb-5 teal darken-2">
           <router-link
             :to="{path: `/blog-view/${data.id}`}"
@@ -44,10 +44,19 @@
           >{{ moment(data.created_at).format('MMMM Do YYYY') }}</v-card-subtitle>
         </v-card>
       </div>
-      <div class="pb-2">
+      <div class="text-center">
+    <v-pagination
+      v-model="page"
+      :length="Math.ceil(this.allBlogData.length/this.noOfItemPerPage)"
+      prev-icon="mdi-menu-left"
+      next-icon="mdi-menu-right"
+      @input="changePage"
+    ></v-pagination>
+  </div>
+      <!-- <div class="pb-2">
         <v-btn class="ma-3" large @click="prevPage">Previous</v-btn>
-        <v-btn class="ma-3" large dark @click="nextPage">Next</v-btn>
-      </div>
+        <v-btn class="ma-3" large dark @click="nextPage()">Next</v-btn>
+      </div> -->
     </v-app>
   </div>
 </template>
@@ -59,11 +68,10 @@ import moment from "moment";
 export default {
   name: "startpage",
   data() {
-    console.log(this.allBlogData, "rere");
+
     return {
-      // totalData: this.allBlogData.length,
-      noOfItemPerPage: 2,
-      currentPage: 1
+      page: 1,
+      noOfItemPerPage: 4
     };
   },
   methods: {
@@ -71,27 +79,8 @@ export default {
     moment: function(date) {
       return moment(date);
     },
-    nextPage: function() {
-      if (this.currentPage * this.noOfItemPerPage < this.allBlogData.length) {
-        this.currentPage++;
-
-        const arr = [];
-        for (
-          let i = this.currentPage - 2;
-          i < this.currentPage + this.noOfItemPerPage;
-          i++
-        ) {
-          // for (let j = 0; j < this.noOfItemPerPage * (i + 1); j++) {
-          arr.push(this.allBlogData[i]);
-          return arr;
-          // }
-        }
-        console.log(arr, "arrr");
-      }
-    },
-    prevPage: function() {
-      if (this.currentPage > 1) this.currentPage--;
-      console.log(this.currentPage, "cccc");
+    changePage(e){
+      this.page = e;
     }
   },
   filters: {
@@ -100,11 +89,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["allBlogData", "loggedIn"])
+    ...mapGetters(["allBlogData", "loggedIn"]),
+    currentItems () {
+        let blogItems = [...this.allBlogData]
+        return blogItems.splice((this.page * this.noOfItemPerPage)-this.noOfItemPerPage, this.noOfItemPerPage)
+    }
   },
   created() {
     this.fetchAllBlog();
-    // let totalData= this.allBlogData.length;
   }
 };
 </script>
