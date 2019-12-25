@@ -44,31 +44,10 @@
           >{{ moment(data.created_at).format('MMMM Do YYYY') }}</v-card-subtitle>
         </v-card>
       </div>
-      <div id="app">
-  <v-app id="inspire">
-    <div>
-      <v-data-table
-        :items="blogDataForPagination"
-        :page.sync="page"
-        :items-per-page="itemsPerPage"
-        hide-default-footer
-        class="elevation-1"
-        @page-count="pageCount = $event"
-      ></v-data-table>
-      <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="pageCount"></v-pagination>
-      <v-text-field
-          :value="itemsPerPage"
-          label="Items per page"
-          type="number"
-          min="-1"
-          max="15"
-          @input="itemsPerPage = parseInt($event, 10)"
-        ></v-text-field>
+      <div class="pb-2">
+        <v-btn class="ma-3" large @click="prevPage">Previous</v-btn>
+        <v-btn class="ma-3" large dark @click="nextPage">Next</v-btn>
       </div>
-    </div>
-  </v-app>
-</div>
     </v-app>
   </div>
 </template>
@@ -79,31 +58,41 @@ import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
 export default {
   name: "startpage",
-  data(){
-    return{
+  data() {
+    console.log(this.allBlogData, "rere");
+    return {
       // totalData: this.allBlogData.length,
-      page: 1,
-      pageCount: 0,
-      itemsPerPage: 2,
-      blogDataForPagination: this.allBlogData.map(each=> each.title)
-      //  [
-      //   {
-      //     name: 'Frozen Yogurt',
-      //     calories: 159,
-      //     fat: 6.0,
-      //     carbs: 24,
-      //     protein: 4.0,
-      //     iron: '1%',
-      //   },
-      // ],
-    }
+      noOfItemPerPage: 2,
+      currentPage: 1
+    };
   },
   methods: {
     ...mapActions(["fetchAllBlog"]),
     moment: function(date) {
       return moment(date);
     },
-   
+    nextPage: function() {
+      if (this.currentPage * this.noOfItemPerPage < this.allBlogData.length) {
+        this.currentPage++;
+
+        const arr = [];
+        for (
+          let i = this.currentPage - 2;
+          i < this.currentPage + this.noOfItemPerPage;
+          i++
+        ) {
+          // for (let j = 0; j < this.noOfItemPerPage * (i + 1); j++) {
+          arr.push(this.allBlogData[i]);
+          return arr;
+          // }
+        }
+        console.log(arr, "arrr");
+      }
+    },
+    prevPage: function() {
+      if (this.currentPage > 1) this.currentPage--;
+      console.log(this.currentPage, "cccc");
+    }
   },
   filters: {
     truncate(string, value) {
@@ -111,7 +100,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([ "allBlogData", "loggedIn"]),
+    ...mapGetters(["allBlogData", "loggedIn"])
   },
   created() {
     this.fetchAllBlog();

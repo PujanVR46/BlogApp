@@ -92,6 +92,7 @@ const mutations = {
 	},
 	allBlogData: (state, allBlogData) => (state.allBlogData = allBlogData)
 };
+
 export default {
 	state,
 	actions,
